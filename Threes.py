@@ -251,14 +251,19 @@ if __name__ == '__main__':
     b.add_random_tile()
     #b.print_board()
     b.add_random_tile()
-    b.print_board()
 
-    b.down()
-    b.print_board()
-    b.down()
-    b.print_board()
-    b.down()
-    b.print_board()
+    a = ''
+    while not a == 'q':
+        b.print_board()
+        a = raw_input("wasd to move, q to quit:")
+        if a == 'w':
+            b.up()
+        elif a == 's':
+            b.down()
+        elif a == 'a':
+            b.left()
+        elif a == 'd':
+            b.right()
 
 
 
