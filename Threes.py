@@ -1,6 +1,6 @@
 __author__ = 'Peter_000'
 from random import randint
-
+import json
 
 class Tile(object):
     def __init__(self, value=0, position=(0, 0)):
@@ -58,6 +58,9 @@ class Tile(object):
         if self.can_be_combined_with(tile):
             self.value += tile.get_value()
             self.set_position(tile.get_position())
+
+    def to_json(self):
+        return {'position': {'row': self.get_row(), 'col': self.get_col()}, 'value': self.get_value()}
 
     def __str__(self):
         if self.value == 0:
@@ -227,7 +230,17 @@ class Board(object):
                             self.tiles.remove(tile_at_destination)  # trust that tile will be garbage collected.
         pass
 
-    def print_board(self):
+    def to_json(self):
+        """
+        Convert object to a json-serializable dictionary
+        """
+        return {'ncols': self.ncols, 'nrows': self.nrows,
+                'tiles': [tile.to_json() for tile in self.tiles],
+                'next_tile': {'value': 3}}
+
+
+    def string_board(self):
+        rows = list()
         for n in range(0, self.nrows):
             row = '|'
             for m in range(0, self.ncols):
@@ -236,8 +249,11 @@ class Board(object):
                     row += " {0:5s} |".format(str(match.get_value()))
                 else:
                     row += " {0:5s} |".format('')
-            print row
-        print ""
+            rows.append(row)
+        return '\n'.join(rows) + '\n'
+
+    def print_board(self):
+        print self.string_board()
 
 
 if __name__ == '__main__':
@@ -251,7 +267,7 @@ if __name__ == '__main__':
     b.add_random_tile()
     #b.print_board()
     b.add_random_tile()
-
+    print json.dumps(b.to_json())
     a = ''
     while not a == 'q':
         b.print_board()
