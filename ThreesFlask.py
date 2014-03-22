@@ -1,38 +1,46 @@
 __author__ = 'Peter_000'
-from Threes import Board
-from flask import Flask
+from Threes import Board, create_board_from_json
+from flask import Flask, request, jsonify
 import json
 app = Flask(__name__)
 
 @app.route('/')
-def board_state():
-    return json.dumps(board.to_json())
+def hello():
+    return 'Hello!'
 
-@app.route('/move/right')
+@app.route('/move/right', methods=['POST'])
 def move_right():
+    board = create_board_from_json(request.data)
     board.right()
-    return json.dumps(board.to_json())
+    return jsonify(board.to_json())
 
-@app.route('/move/left')
+@app.route('/move/left', methods=['POST'])
 def move_left():
+    board = create_board_from_json(request.data)
     board.left()
-    return json.dumps(board.to_json())
+    return jsonify(board.to_json())
 
-@app.route('/move/up')
+@app.route('/move/up', methods=['POST'])
 def move_up():
+    board = create_board_from_json(request.data)
     board.up()
-    return json.dumps(board.to_json())
+    return jsonify(board.to_json())
 
-@app.route('/move/down')
+@app.route('/move/down', methods=['POST'])
 def move_down():
+    '''
+    Each movement must post the board state to be mutated such that
+    web service is stateless.
+    '''
+    # need to grab board state from POST request
+    board = create_board_from_json(request.data)
     board.down()
-    return json.dump(board.to_json())
+    return jsonify(board.to_json())
 
 @app.route('/new')
 def new_board():
-    # TODO: this does not actually change the board beyond json returned
     board = get_new_board()
-    return json.dumps(board.to_json())
+    return jsonify(board.to_json())
 
 def get_new_board(nrows=4, ncols=4):
     b = Board(nrows, ncols)
@@ -42,5 +50,4 @@ def get_new_board(nrows=4, ncols=4):
     return b
 
 if __name__ == '__main__':
-    board = get_new_board()
     app.run()

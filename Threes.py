@@ -119,6 +119,10 @@ class Board(object):
         else:
             return False
 
+    def add_tile(self, tile):
+        self.tiles.append(tile)
+        pass
+
     def add_random_tile(self):
         """
         :type self: Board
@@ -256,17 +260,31 @@ class Board(object):
         print self.string_board()
 
 
+def create_board_from_json(json_board_definition):
+    '''
+    Assumes json_board_definition is of form:
+    CreateBoardFromJson('{"nrows": 4, "tiles": [{"position": {"col": 2, "row": 0}, "value": 1}, {"position": {"col": 3, "row": 2}, "value": 1}, {"position": {"col": 0, "row": 1}, "value": 1}, {"position": {"col": 0, "row": 2}, "value": 2}, {"position": {"col": 2, "row": 2}, "value": 1}, {"position": {"col": 1, "row": 0}, "value": 1}, {"position": {"col": 0, "row": 3}, "value": 2}], "next_tile": {"value": 3}, "ncols": 4}')
+    '''
+    obj = json.loads(json_board_definition)
+    board = Board(nrows=obj['nrows'], ncols=obj['ncols'])
+    for tile in obj['tiles']:
+        board.add_tile(Tile(position=(tile['position']['row'], tile['position']['col']), value=tile['value']))
+    return board
+
+
 if __name__ == '__main__':
-    b = Board(4, 4)
-    b.add_random_tile()
-    #b.print_board()
-    b.add_random_tile()
-    b.add_random_tile()
-    b.add_random_tile()
-    b.add_random_tile()
-    b.add_random_tile()
-    #b.print_board()
-    b.add_random_tile()
+    b = create_board_from_json('{"nrows": 4, "tiles": [{"position": {"col": 2, "row": 0}, "value": 1}, {"position": {"col": 3, "row": 2}, "value": 1}, {"position": {"col": 0, "row": 1}, "value": 1}, {"position": {"col": 0, "row": 2}, "value": 2}, {"position": {"col": 2, "row": 2}, "value": 1}, {"position": {"col": 1, "row": 0}, "value": 1}, {"position": {"col": 0, "row": 3}, "value": 2}], "next_tile": {"value": 3}, "ncols": 4}')
+
+    # b = Board(4, 4)
+    # b.add_random_tile()
+    # #b.print_board()
+    # b.add_random_tile()
+    # b.add_random_tile()
+    # b.add_random_tile()
+    # b.add_random_tile()
+    # b.add_random_tile()
+    # #b.print_board()
+    # b.add_random_tile()
     print json.dumps(b.to_json())
     a = ''
     while not a == 'q':
