@@ -2,6 +2,24 @@
  * Created by Peter_000 on 3/23/14.
  */
 $(document).ready(function() {
+    var listener = new window.keypress.Listener();
+
+    listener.simple_combo("up", function() {
+        console.log("You pressed up");
+    });
+
+    listener.simple_combo("down", function() {
+        console.log("You pressed down");
+    });
+
+    listener.simple_combo("right", function() {
+        console.log("You pressed right");
+    });
+
+    listener.simple_combo("left", function() {
+        console.log("You pressed left")
+    });
+
     // first step, call http://127.0.0.1:5000/new to get board
     /*
     JSONBoard = {
