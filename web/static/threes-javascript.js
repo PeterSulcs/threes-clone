@@ -1,27 +1,49 @@
 /**
  * Created by Peter_000 on 3/23/14.
  */
+
 $(document).ready(function() {
+
+
     var listener = new window.keypress.Listener();
 
-    listener.simple_combo("up", function() {
+    function add_keypress_with_logs(keypress){
+        var logs = new Array()
+        function add_keypress(keypress) {
+
+        }
+        return function(keypress){add_keypress(keypress)}
+    }
+    // create simple example of how to store state
+    var listOfMoves = new Array()
+
+    listener.simple_combo("up", function(listOfMoves) {
         console.log("You pressed up");
+        listOfMoves.push("up")
     });
 
-    listener.simple_combo("down", function() {
+    listener.simple_combo("down", function(listOfMoves) {
         console.log("You pressed down");
+        listOfMoves.push("down")
     });
 
-    listener.simple_combo("right", function() {
+    listener.simple_combo("right", function(){function handle_right(listOfMoves) {
         console.log("You pressed right");
-    });
+        listOfMoves.push("right")
+    }}());
 
-    listener.simple_combo("left", function() {
+    listener.simple_combo("left", function(listOfMoves) {
         console.log("You pressed left")
+        listOfMoves.push("left")
     });
 
-    // first step, call http://127.0.0.1:5000/new to get board
-    /*
+    listener.simple_combo("i", function(listOfMoves) {
+        console.log("printing out history:")
+        console.log(listOfMoves.toString())
+    });
+
+    // first step, call /new to get board
+
     JSONBoard = {
         "nrows": 4,
         "tiles": [
@@ -35,11 +57,26 @@ $(document).ready(function() {
         "next_tile": {"value": 3},
         "ncols": 4
     }
-    drawBoard(JSONBoard)
-    */
-    d3.json('/new',function(jsonData) {
-            drawBoard(jsonData);
+    //drawBoard(JSONBoard)
+    function postToUrl(theUrl, boardStateJson, onSuccessFcn){
+        // Abstracting the ajax call to POST to webservice as this
+        // was somewhat fussy to get working.
+        $.ajax({
+        type: "POST",
+        url: theUrl,
+        data: JSON.stringify(boardStateJson, null, '\t'),
+        contentType: 'application/json;charset=UTF-8',
+        success: onSuccessFcn});
+    }
+
+    console.log(JSON.stringify(JSONBoard))
+    postToUrl('/move/up', JSONBoard, function(result){drawBoard(result)})
+
+    /*
+    d3.json('/move/up',JSONBoard, function(jsonData) {
+            drawBoardFcn(jsonData);
     });
+    */
 
     function drawBoard(JSONBoard) {
         console.log(JSONBoard)
