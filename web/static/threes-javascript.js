@@ -5,10 +5,11 @@
 $(document).ready(function() {
     var listener = new window.keypress.Listener();
 
+    // key logger object:
     function Logger(name){
         var logs = new Array();
         var logName = name;
-        this.addKeypress = function add_keypress(keypress) {
+        this.addKeypress = function(keypress) {
             logs.push(keypress);
         }
         this.getLogs = function get_logs(){
@@ -16,45 +17,25 @@ $(document).ready(function() {
         }
     }
 
-    var theLog = new Logger('myTestLogger');
-
-    logAnUp = function(){
-        console.log("you pressed up");
-        theLog.addKeypress('up')
-    };
-
-    logADown = function(){
-        console.log("you pressed dow");
-        theLog.addKeypress('down')
-    };
-
-    logARight = function(){
-        console.log("you pressed right");
-        theLog.addKeypress('right')
-    };
-    logALeft = function(){
-        console.log("you pressed left");
-        theLog.addKeypress('left')
-    };
-
-    printOutLog = function(){
-        console.log(theLog.getLogs().toString())
+    // Board State object:
+    function BoardState(){
+        var boardStateJson;
+        this.setBoardState = function(boardState){
+            boardStateJson = boardState;
+            // Update D3 visualization:
+            console.log("setting board state!");
+            console.log(JSON.stringify(boardStateJson));
+            drawBoard(boardStateJson);
+        }
+        this.getBoardState = function(){
+            return boardStateJson;
+        }
     }
 
-    // create simple example of how to store state
+    var theLog = new Logger('myTestLogger');
+    var theBoard = new BoardState();
 
-    listener.simple_combo("up", logAnUp);
-
-    listener.simple_combo("down", logADown);
-
-    listener.simple_combo("right", logARight);
-
-    listener.simple_combo("left", logALeft);
-
-    listener.simple_combo("i", printOutLog);
-
-    // first step, call /new to get board
-
+    // intial board:
     JSONBoard = {
         "nrows": 4,
         "tiles": [
@@ -68,6 +49,10 @@ $(document).ready(function() {
         "next_tile": {"value": 3},
         "ncols": 4
     }
+
+    // get initial board
+    theBoard.setBoardState(JSONBoard);
+
     //drawBoard(JSONBoard)
     function postToUrl(theUrl, boardStateJson, onSuccessFcn){
         // Abstracting the ajax call to POST to webservice as this
@@ -80,8 +65,53 @@ $(document).ready(function() {
         success: onSuccessFcn});
     }
 
+    moveUp = function(){
+        console.log("you pressed up");
+        theLog.addKeypress('up');
+        postToUrl('/move/up', theBoard.getBoardState(), function(response){theBoard.setBoardState(response)});
+    };
+
+    moveDown = function(){
+        console.log("you pressed down");
+        theLog.addKeypress('down');
+        postToUrl('/move/down', theBoard.getBoardState(), function(response){theBoard.setBoardState(response)});
+    };
+
+    moveRight = function(){
+        console.log("you pressed right");
+        theLog.addKeypress('right');
+        postToUrl('/move/right', theBoard.getBoardState(), function(response){theBoard.setBoardState(response)});
+    };
+
+    moveLeft = function(){
+        console.log("you pressed left");
+        theLog.addKeypress('left');
+        postToUrl('/move/left', theBoard.getBoardState(), function(response){theBoard.setBoardState(response)});
+    };
+
+    printOutLog = function(){
+        console.log(theLog.getLogs().toString());
+    };
+
+    // create simple example of how to store state
+
+    listener.simple_combo("up", moveUp);
+
+    listener.simple_combo("down", moveDown);
+
+    listener.simple_combo("right", moveRight);
+
+    listener.simple_combo("left", moveLeft);
+
+    listener.simple_combo("i", printOutLog);
+
+    // first step, call /new to get board
+
+
+
+
     console.log(JSON.stringify(JSONBoard))
-    postToUrl('/move/up', JSONBoard, function(result){drawBoard(result)})
+    //postToUrl('/move/up', JSONBoard, function(result){drawBoard(result)})
 
     /*
     d3.json('/move/up',JSONBoard, function(jsonData) {
@@ -116,5 +146,7 @@ $(document).ready(function() {
         .attr("r", sizeFn)
         .attr("cx", function(d) { return x(xPosFn(d)) })
         .attr("cy", function(d) { return y(yPosFn(d)) })
+
+
     }
 })
