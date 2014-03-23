@@ -17,20 +17,14 @@ $(document).ready(function() {
         "next_tile": {"value": 3},
         "ncols": 4
     }
+    drawBoard(JSONBoard)
     */
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:5000/new",
-        dataType: "json",
-        success: function(jsonData) {
+    d3.json('/new',function(jsonData) {
             drawBoard(jsonData);
-        },
-        error: function() {
-            alert("Error getting new board");
-        }
     });
 
     function drawBoard(JSONBoard) {
+        console.log(JSONBoard)
         var ncols = JSONBoard['ncols']
         var nrows = JSONBoard['nrows']
         var tiles = JSONBoard['tiles'].slice()

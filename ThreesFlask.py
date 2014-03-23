@@ -1,12 +1,14 @@
 __author__ = 'Peter_000'
 from Threes import Board, create_board_from_json
 from flask import Flask, request, jsonify
+from flask import render_template
 import json
-app = Flask(__name__)
+app = Flask(__name__, static_folder='web/static', static_url_path='')
+app.template_folder = 'web'
 
 @app.route('/')
-def hello():
-    return 'Hello!'
+def index():
+    return render_template('index.html')
 
 @app.route('/move/right', methods=['POST'])
 def move_right():
@@ -36,6 +38,7 @@ def move_down():
     board = create_board_from_json(request.data)
     board.down()
     return jsonify(board.to_json())
+
 
 @app.route('/new')
 def new_board():
