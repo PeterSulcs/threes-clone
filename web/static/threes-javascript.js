@@ -3,44 +3,55 @@
  */
 
 $(document).ready(function() {
-
-
     var listener = new window.keypress.Listener();
 
-    function add_keypress_with_logs(keypress){
-        var logs = new Array()
-        function add_keypress(keypress) {
-
+    function Logger(name){
+        var logs = new Array();
+        var logName = name;
+        this.addKeypress = function add_keypress(keypress) {
+            logs.push(keypress);
         }
-        return function(keypress){add_keypress(keypress)}
+        this.getLogs = function get_logs(){
+            return logs;
+        }
     }
+
+    var theLog = new Logger('myTestLogger');
+
+    logAnUp = function(){
+        console.log("you pressed up");
+        theLog.addKeypress('up')
+    };
+
+    logADown = function(){
+        console.log("you pressed dow");
+        theLog.addKeypress('down')
+    };
+
+    logARight = function(){
+        console.log("you pressed right");
+        theLog.addKeypress('right')
+    };
+    logALeft = function(){
+        console.log("you pressed left");
+        theLog.addKeypress('left')
+    };
+
+    printOutLog = function(){
+        console.log(theLog.getLogs().toString())
+    }
+
     // create simple example of how to store state
-    var listOfMoves = new Array()
 
-    listener.simple_combo("up", function(listOfMoves) {
-        console.log("You pressed up");
-        listOfMoves.push("up")
-    });
+    listener.simple_combo("up", logAnUp);
 
-    listener.simple_combo("down", function(listOfMoves) {
-        console.log("You pressed down");
-        listOfMoves.push("down")
-    });
+    listener.simple_combo("down", logADown);
 
-    listener.simple_combo("right", function(){function handle_right(listOfMoves) {
-        console.log("You pressed right");
-        listOfMoves.push("right")
-    }}());
+    listener.simple_combo("right", logARight);
 
-    listener.simple_combo("left", function(listOfMoves) {
-        console.log("You pressed left")
-        listOfMoves.push("left")
-    });
+    listener.simple_combo("left", logALeft);
 
-    listener.simple_combo("i", function(listOfMoves) {
-        console.log("printing out history:")
-        console.log(listOfMoves.toString())
-    });
+    listener.simple_combo("i", printOutLog);
 
     // first step, call /new to get board
 
@@ -79,7 +90,7 @@ $(document).ready(function() {
     */
 
     function drawBoard(JSONBoard) {
-        console.log(JSONBoard)
+        //console.log(JSONBoard)
         var ncols = JSONBoard['ncols']
         var nrows = JSONBoard['nrows']
         var tiles = JSONBoard['tiles'].slice()
