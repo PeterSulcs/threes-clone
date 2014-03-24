@@ -51,6 +51,7 @@ $(document).ready(function() {
     }
 
     // get initial board
+    initializeBoard(JSONBoard);
     theBoard.setBoardState(JSONBoard);
 
     //drawBoard(JSONBoard)
@@ -93,8 +94,6 @@ $(document).ready(function() {
         console.log(theLog.getLogs().toString());
     };
 
-    // create simple example of how to store state
-
     listener.simple_combo("up", moveUp);
 
     listener.simple_combo("down", moveDown);
@@ -105,11 +104,6 @@ $(document).ready(function() {
 
     listener.simple_combo("i", printOutLog);
 
-    // first step, call /new to get board
-
-
-
-
     console.log(JSON.stringify(JSONBoard))
     //postToUrl('/move/up', JSONBoard, function(result){drawBoard(result)})
 
@@ -118,8 +112,7 @@ $(document).ready(function() {
             drawBoardFcn(jsonData);
     });
     */
-
-    function drawBoard(JSONBoard) {
+    function initializeBoard(JSONBoard) {
         //console.log(JSONBoard)
         var ncols = JSONBoard['ncols']
         var nrows = JSONBoard['nrows']
@@ -131,22 +124,54 @@ $(document).ready(function() {
 
         var x = d3.scale.linear()
         .range([10, 280])
-        .domain(d3.extent(tiles, xPosFn))
+        .domain([0, ncols])
 
         var y = d3.scale.linear()
         .range([10, 280])
-        .domain(d3.extent(tiles, yPosFn))
+        .domain([0, nrows])
 
         var svg = d3.select("#demo").append("svg:svg")
         .attr("width", 600)
         .attr("height", 600)
+    }
 
-        svg.selectAll("circle").data(tiles).enter()
+
+    function drawBoard(JSONBoard) {
+        var ncols = JSONBoard['ncols']
+        var nrows = JSONBoard['nrows']
+        var tiles = JSONBoard['tiles'].slice()
+
+        var xPosFn = function(d) { return d.position.col }
+        var yPosFn = function(d) { return d.position.row }
+        var sizeFn = function(d) { return d.value*3 }
+
+        var x = d3.scale.linear()
+        .range([10, 280])
+        .domain([0, ncols])
+
+        var y = d3.scale.linear()
+        .range([10, 280])
+        .domain([0, nrows])
+
+        var svg = d3.select("#demo > svg");
+        svg.selectAll("circle").remove();
+
+        var join = svg.selectAll("circle").data(tiles);
+
+        join.exit().remove();
+
+        join.enter()
         .append("svg:circle")
         .attr("r", sizeFn)
         .attr("cx", function(d) { return x(xPosFn(d)) })
         .attr("cy", function(d) { return y(yPosFn(d)) })
 
+        /*svg.selectAll("circle").data(tiles).transition()
+        .attr("r", sizeFn)
+        .attr("cx", function(d) { return x(xPosFn(d)) })
+        .attr("cy", function(d) { return y(yPosFn(d)) })*/
 
+        //svg.selectAll("circle").data(tiles).exit().remove();
     }
+
 })
