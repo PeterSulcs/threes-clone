@@ -139,17 +139,25 @@ $(document).ready(function() {
 
         var svg = d3.select("#demo > svg");
         svg.selectAll("rect").remove();
-
         var join = svg.selectAll("rect").data(tiles);
-
-        //join.exit().remove();
-
         join.enter()
             .append("svg:rect")
-            .attr("height", sizeFn)
-            .attr("width", sizeFn)
+            .attr("height", function() {return y(0.50)})
+            .attr("width", function() {return x(0.50)})
             .attr("x", function(d) { return x(xPosFn(d)) })
             .attr("y", function(d) { return y(yPosFn(d)) })
+
+        var labels = d3.select("#demo > svg");
+        labels.selectAll("text").remove();
+        var join = labels.selectAll("text").data(tiles);
+        join.enter()
+            .append("svg:text")
+            .attr("x", function(d) { return x(xPosFn(d)+0.25)})
+            .attr("y", function(d) { return y(yPosFn(d)+0.25)})
+            .attr("fill", "white")
+            .attr("font-family","Verdana")
+            .attr("font-size","12")
+            .text(function(d){return d.value.toString()})
 
         /*svg.selectAll("circle").data(tiles).transition()
         .attr("r", sizeFn)
