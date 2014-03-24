@@ -127,36 +127,42 @@ $(document).ready(function() {
 
         var xPosFn = function(d) { return d.position.col }
         var yPosFn = function(d) { return d.position.row }
-        var sizeFn = function(d) { return d.value*3 }
+        var zPosFn = function(d) { return d.value }
 
         var x = d3.scale.linear()
-        .range([10, 280])
+        .range([0, 600])
         .domain([0, ncols])
 
         var y = d3.scale.linear()
-        .range([10, 280])
+        .range([0, 600])
         .domain([0, nrows])
+
+        var z = d3.scale.linear()
+            .domain([1,5,512])
+            .range(["green","brown","red"]);
 
         var svg = d3.select("#demo > svg");
         svg.selectAll("rect").remove();
         var join = svg.selectAll("rect").data(tiles);
         join.enter()
             .append("svg:rect")
-            .attr("height", function() {return y(0.50)})
-            .attr("width", function() {return x(0.50)})
-            .attr("x", function(d) { return x(xPosFn(d)) })
-            .attr("y", function(d) { return y(yPosFn(d)) })
+            .attr("height", function() {return y(0.95)})
+            .attr("width", function() {return x(0.95)})
+            .attr("x", function(d) { return x(xPosFn(d)+0.025) })
+            .attr("y", function(d) { return y(yPosFn(d)+0.025) })
+            .attr("fill", function(d) {return z(zPosFn(d))})
 
         var labels = d3.select("#demo > svg");
         labels.selectAll("text").remove();
         var join = labels.selectAll("text").data(tiles);
         join.enter()
             .append("svg:text")
-            .attr("x", function(d) { return x(xPosFn(d)+0.25)})
-            .attr("y", function(d) { return y(yPosFn(d)+0.25)})
+            .attr("x", function(d) { return x(xPosFn(d)+0.5)})
+            .attr("y", function(d) { return y(yPosFn(d)+0.5)})
             .attr("fill", "white")
             .attr("font-family","Verdana")
             .attr("font-size","12")
+            .attr("text-anchor","middle")
             .text(function(d){return d.value.toString()})
 
         /*svg.selectAll("circle").data(tiles).transition()
