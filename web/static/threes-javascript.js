@@ -114,22 +114,6 @@ $(document).ready(function() {
     */
     function initializeBoard(JSONBoard) {
         //console.log(JSONBoard)
-        var ncols = JSONBoard['ncols']
-        var nrows = JSONBoard['nrows']
-        var tiles = JSONBoard['tiles'].slice()
-
-        var xPosFn = function(d) { return d.position.col }
-        var yPosFn = function(d) { return d.position.row }
-        var sizeFn = function(d) { return d.value*3 }
-
-        var x = d3.scale.linear()
-        .range([10, 280])
-        .domain([0, ncols])
-
-        var y = d3.scale.linear()
-        .range([10, 280])
-        .domain([0, nrows])
-
         var svg = d3.select("#demo").append("svg:svg")
         .attr("width", 600)
         .attr("height", 600)
@@ -154,17 +138,18 @@ $(document).ready(function() {
         .domain([0, nrows])
 
         var svg = d3.select("#demo > svg");
-        svg.selectAll("circle").remove();
+        svg.selectAll("rect").remove();
 
-        var join = svg.selectAll("circle").data(tiles);
+        var join = svg.selectAll("rect").data(tiles);
 
-        join.exit().remove();
+        //join.exit().remove();
 
         join.enter()
-        .append("svg:circle")
-        .attr("r", sizeFn)
-        .attr("cx", function(d) { return x(xPosFn(d)) })
-        .attr("cy", function(d) { return y(yPosFn(d)) })
+            .append("svg:rect")
+            .attr("height", sizeFn)
+            .attr("width", sizeFn)
+            .attr("x", function(d) { return x(xPosFn(d)) })
+            .attr("y", function(d) { return y(yPosFn(d)) })
 
         /*svg.selectAll("circle").data(tiles).transition()
         .attr("r", sizeFn)
