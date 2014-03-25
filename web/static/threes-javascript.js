@@ -138,8 +138,14 @@ $(document).ready(function() {
         .domain([0, nrows])
 
         var z = d3.scale.linear()
-            .domain([1,5,512])
-            .range(["green","brown","red"]);
+            .domain([1       ,2        , 3       , 6       , 12      , 24      , 48      , 96      , 768     ])
+            .range(["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"])
+            //.range(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]);
+
+        var z_reverse = d3.scale.linear()
+            .domain([1       ,2        , 3       , 6       , 12      , 24      , 48      , 96      , 768     ])
+            .range(['#084081', '#0868ac', '#2b8cbe', '#4eb3d3', 'black', '#a8ddb5', '#ccebc5', '#e0f3db', '#f7fcf0'])
+            //.range(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]);
 
         var svg = d3.select("#demo > svg");
         svg.selectAll("rect").remove();
@@ -159,9 +165,9 @@ $(document).ready(function() {
             .append("svg:text")
             .attr("x", function(d) { return x(xPosFn(d)+0.5)})
             .attr("y", function(d) { return y(yPosFn(d)+0.5)})
-            .attr("fill", "white")
+            .attr("fill", function(d) { return z_reverse(zPosFn(d))})
             .attr("font-family","Verdana")
-            .attr("font-size","12")
+            .attr("font-size","24")
             .attr("text-anchor","middle")
             .text(function(d){return d.value.toString()})
 
