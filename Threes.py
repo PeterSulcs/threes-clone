@@ -1,5 +1,6 @@
 __author__ = 'Peter_000'
 from random import randint
+import random
 import json
 
 class Tile(object):
@@ -70,12 +71,17 @@ class Tile(object):
         return " {0:5s} |".format(str(value))
 
 
+def get_random_tile_value():
+    return random.choice([1, 2, 3, 6])
+
+
 class Board(object):
 
     def __init__(self, nrows=4, ncols=4):
         self.nrows = nrows
         self.ncols = ncols
         self.tiles = list()
+        self.next_tile_value = get_random_tile_value()  # picks random number from list
 
     def is_full(self):
         if len(self.tiles) >= self.nrows * self.ncols:
@@ -123,6 +129,26 @@ class Board(object):
         self.tiles.append(tile)
         pass
 
+    def add_random_tile_in_col(self, col):
+        possible_locations = list()
+        for n in range(0, self.nrows):
+            if not self.is_space_filled(n, col):
+                possible_locations.append(n)
+        if possible_locations:
+            self.add_tile(Tile(value=self.next_tile_value, position=(random.choice(possible_locations), col)))
+            self.next_tile_value = get_random_tile_value()
+        pass
+
+    def add_random_tile_in_row(self, row):
+        possible_locations = list()
+        for n in range(0, self.nrows):
+            if not self.is_space_filled(row, n):
+                possible_locations.append(n)
+        if possible_locations:
+            self.add_tile(Tile(value=self.next_tile_value, position=(row, random.choice(possible_locations))))
+            self.next_tile_value = get_random_tile_value()
+        pass
+
     def add_random_tile(self):
         """
         :type self: Board
@@ -160,6 +186,7 @@ class Board(object):
                             combine_limit_reached = True
                             assert isinstance(tile, Tile)
                             self.tiles.remove(tile_at_destination)  # trust that tile will be garbage collected.
+        self.add_random_tile_in_row(self.nrows-1)
 
     def down(self):
         """
@@ -184,6 +211,7 @@ class Board(object):
                             combine_limit_reached = True
                             assert isinstance(tile, Tile)
                             self.tiles.remove(tile_at_destination)  # trust that tile will be garbage collected.
+        self.add_random_tile_in_row(0)
 
     def right(self):
         """
@@ -208,6 +236,7 @@ class Board(object):
                             combine_limit_reached = True
                             assert isinstance(tile, Tile)
                             self.tiles.remove(tile_at_destination)  # trust that tile will be garbage collected.
+        self.add_random_tile_in_col(0)
         pass
 
     def left(self):
@@ -232,6 +261,7 @@ class Board(object):
                             tile.combine_into(tile_at_destination)
                             combine_limit_reached = True
                             self.tiles.remove(tile_at_destination)  # trust that tile will be garbage collected.
+        self.add_random_tile_in_row(self.ncols-1)
         pass
 
     def to_json(self):
