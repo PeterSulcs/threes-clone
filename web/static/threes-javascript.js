@@ -115,8 +115,8 @@ $(document).ready(function() {
     function initializeBoard(JSONBoard) {
         //console.log(JSONBoard)
         var svg = d3.select("#demo").append("svg:svg")
-        .attr("width", 600)
-        .attr("height", 600)
+        .attr("width", 300)
+        .attr("height", 300)
     }
 
 
@@ -130,11 +130,11 @@ $(document).ready(function() {
         var zPosFn = function(d) { return d.value }
 
         var x = d3.scale.linear()
-        .range([0, 600])
+        .range([0, 300])
         .domain([0, ncols])
 
         var y = d3.scale.linear()
-        .range([0, 600])
+        .range([0, 300])
         .domain([0, nrows])
 
         var z = d3.scale.linear()
