@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Threes Clone</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Allan:bold" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Cardo" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        h1 {
+            font-family: 'Allan', Helvetica, Arial, sans-serif;
+            font-size: 70px;
+            line-height: 75px;
+        }
 
+        p {
+            font-family: 'Cardo', Georgia, Times, serif;
+            font-size: 18px;
+            line-height: 25px;
+        }
+    </style>
 </head>
 <body>
-    <pre>
-        Should look like:
-        |       | 1     | 1     |       |
-        | 1     |       |       |       |
-        | 2     |       | 1     | 1     |
-        | 2     |       |       |       |
-    </pre>
-    <div id="demo" style="text-align: center;">
+    <h1 class="text-center">Threes Clone </h1>
+    <p class="text-center">Score: You are <strong>definitely</strong> winning</p>
+    <div class="jumbotron" id="demo" style="text-align: center;">
     </div>
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="d3.min.js"></script>
+    <script type="text/javascript" src = "bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="keypress-2.0.1.min.js"></script>
     <script type="text/javascript" src="threes-javascript.js"></script>
 </body>

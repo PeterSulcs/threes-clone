@@ -167,7 +167,7 @@ $(document).ready(function() {
             .attr("x", function(d) { return x(xPosFn(d)+0.5)})
             .attr("y", function(d) { return y(yPosFn(d)+0.5)})
             .attr("fill", function(d) { return z_reverse(zPosFn(d))})
-            .attr("font-family","Verdana")
+            .attr("font-family","Allan")
             .attr("font-size","24")
             .attr("text-anchor","middle")
             .text(function(d){return d.value.toString()})
