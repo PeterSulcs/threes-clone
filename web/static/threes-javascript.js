@@ -138,13 +138,14 @@ $(document).ready(function() {
         .domain([0, nrows])
 
         var z = d3.scale.linear()
-            .domain([1       ,2        , 3       , 6       , 12      , 24      , 48      , 96      , 768     ])
-            .range(["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"])
+            .domain([1       ,2        , 3       , 6       , 12      , 24      , 48      , 96      , 768     , 1536    , 3072])
+            .range(["#7f3b08","#2d004b","#b35806","#e08214","#fdb863","#fee0b6","#f7f7f7","#d8daeb","#b2abd2","#8073ac","#542788"])
+            //.range(["#f7fcf0","#e0f3db","#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"])
             //.range(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]);
 
         var z_reverse = d3.scale.linear()
             .domain([1       ,2        , 3       , 6       , 12      , 24      , 48      , 96      , 768     ])
-            .range(['#084081', '#0868ac', '#2b8cbe', '#4eb3d3', 'black', '#a8ddb5', '#ccebc5', '#e0f3db', '#f7fcf0'])
+            .range(['white', 'white', 'black', 'black', 'black', 'black', 'black', 'black', 'black'])
             //.range(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]);
 
         var svg = d3.select("#demo > svg");
