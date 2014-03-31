@@ -39,15 +39,16 @@ $(document).ready(function() {
     JSONBoard = {
         "nrows": 4,
         "tiles": [
-            {"position": {"col": 2, "row": 0}, "value": 1},
-            {"position": {"col": 3, "row": 2}, "value": 1},
-            {"position": {"col": 0, "row": 1}, "value": 1},
-            {"position": {"col": 0, "row": 2}, "value": 2},
-            {"position": {"col": 2, "row": 2}, "value": 1},
-            {"position": {"col": 1, "row": 0}, "value": 1},
-            {"position": {"col": 0, "row": 3}, "value": 2}],
+            {"position": {"col": 2, "row": 0}, "value": 1, "id": 1},
+            {"position": {"col": 3, "row": 2}, "value": 1, "id": 2},
+            {"position": {"col": 0, "row": 1}, "value": 1, "id": 3},
+            {"position": {"col": 0, "row": 2}, "value": 2, "id": 4},
+            {"position": {"col": 2, "row": 2}, "value": 1, "id": 5},
+            {"position": {"col": 1, "row": 0}, "value": 1, "id": 6},
+            {"position": {"col": 0, "row": 3}, "value": 2, "id": 7}],
         "next_tile": {"value": 3},
-        "ncols": 4
+        "ncols": 4,
+        "next_id": 8
     }
 
     // get initial board
