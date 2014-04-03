@@ -149,7 +149,7 @@ $(document).ready(function() {
             //.range(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"]);
 
         var svg = d3.select("#demo > svg");
-        svg.selectAll("rect").remove();
+        //svg.selectAll("rect").remove();
         var join = svg.selectAll("rect").data(tiles);
         join.enter()
             .append("svg:rect")
@@ -159,8 +159,17 @@ $(document).ready(function() {
             .attr("y", function(d) { return y(yPosFn(d)+0.025) })
             .attr("fill", function(d) {return z(zPosFn(d))})
 
+        join.transition()
+            .attr("height", function() {return y(0.95)})
+            .attr("width", function() {return x(0.95)})
+            .attr("x", function(d) { return x(xPosFn(d)+0.025) })
+            .attr("y", function(d) { return y(yPosFn(d)+0.025) })
+            .attr("fill", function(d) {return z(zPosFn(d))})
+
+        join.exit().transition().remove();
+
         var labels = d3.select("#demo > svg");
-        labels.selectAll("text").remove();
+        //labels.selectAll("text").remove();
         var join = labels.selectAll("text").data(tiles);
         join.enter()
             .append("svg:text")
@@ -171,6 +180,17 @@ $(document).ready(function() {
             .attr("font-size","24")
             .attr("text-anchor","middle")
             .text(function(d){return d.value.toString()})
+
+        join.transition()
+            .attr("x", function(d) { return x(xPosFn(d)+0.5)})
+            .attr("y", function(d) { return y(yPosFn(d)+0.5)})
+            .attr("fill", function(d) { return z_reverse(zPosFn(d))})
+            .attr("font-family","Allan")
+            .attr("font-size","24")
+            .attr("text-anchor","middle")
+            .text(function(d){return d.value.toString()})
+
+        join.exit().transition().remove();
 
         /*svg.selectAll("circle").data(tiles).transition()
         .attr("r", sizeFn)
