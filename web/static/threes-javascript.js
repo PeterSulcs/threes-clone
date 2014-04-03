@@ -168,7 +168,7 @@ $(document).ready(function() {
             .attr("y", function(d) { return y(yPosFn(d)+0.025) })
             .attr("fill", function(d) {return z(zPosFn(d))})
 
-        join.exit().transition().remove();
+        join.exit().remove();
 
         var labels = d3.select("#demo > svg");
         //labels.selectAll("text").remove();
@@ -193,7 +193,7 @@ $(document).ready(function() {
             .attr("text-anchor","middle")
             .text(function(d){return d.value.toString()})
 
-        join.exit().transition().remove();
+        join.exit().remove();
 
         /*svg.selectAll("circle").data(tiles).transition()
         .attr("r", sizeFn)
