@@ -4,10 +4,15 @@ import random
 import json
 
 class Tile(object):
-    def __init__(self, value=0, position=(0, 0)):
+    def __init__(self, value=0, position=(0, 0), an_id=0):
+        """
+
+        :type an_id: int
+        """
         self.value = value
         self.row = position[0]
         self.col = position[1]
+        self.id = an_id
 
     def set_position(self, position):
         self.row = position[0]
@@ -15,6 +20,9 @@ class Tile(object):
 
     def get_position(self):
         return self.row, self.col
+
+    def get_id(self):
+        return self.id
 
     def get_row(self):
         return self.row
@@ -24,6 +32,10 @@ class Tile(object):
 
     def get_value(self):
         return self.value
+
+    def get_score(self):
+        # 3^(log(value/3)/log(2) + 1)
+        return
 
     def move_right(self):
         self.col += 1
@@ -61,7 +73,7 @@ class Tile(object):
             self.set_position(tile.get_position())
 
     def to_json(self):
-        return {'position': {'row': self.get_row(), 'col': self.get_col()}, 'value': self.get_value()}
+        return {'position': {'row': self.get_row(), 'col': self.get_col()}, 'value': self.get_value(), 'id': self.get_id()}
 
     def __str__(self):
         if self.value == 0:
@@ -72,16 +84,18 @@ class Tile(object):
 
 
 def get_random_tile_value():
-    return random.choice([1, 2, 3, 6])
-
+    return random.choice([1, 2, 3])  # even split between 1, 2, 3
+                                        # once 48 is the highest, then 6's become a possibility
+                                        # once 96 is the highest, then 12's become a possibility
 
 class Board(object):
 
-    def __init__(self, nrows=4, ncols=4):
+    def __init__(self, nrows=4, ncols=4, next_id=1):
         self.nrows = nrows
         self.ncols = ncols
         self.tiles = list()
         self.next_tile_value = get_random_tile_value()  # picks random number from list
+        self.next_id = next_id
 
     def is_full(self):
         if len(self.tiles) >= self.nrows * self.ncols:
@@ -159,7 +173,8 @@ class Board(object):
                 row = self.get_random_row()
                 col = self.get_random_col()
                 if not self.is_space_filled(row, col):
-                    self.tiles.append(Tile(value=randint(1, 2), position=(row, col)))
+                    self.tiles.append(Tile(value=randint(1, 2), position=(row, col), an_id=self.next_id))
+                    self.next_id += 1
                     placed = True
         pass
 
@@ -270,7 +285,8 @@ class Board(object):
         """
         return {'ncols': self.ncols, 'nrows': self.nrows,
                 'tiles': [tile.to_json() for tile in self.tiles],
-                'next_tile': {'value': 3}}
+                'next_tile': {'value': 3},
+                'next_id': self.next_id}
 
 
     def string_board(self):
@@ -286,6 +302,10 @@ class Board(object):
             rows.append(row)
         return '\n'.join(rows) + '\n'
 
+
+    def get_score(self):
+        return 0
+
     def print_board(self):
         print self.string_board()
 
@@ -296,14 +316,14 @@ def create_board_from_json(json_board_definition):
     CreateBoardFromJson('{"nrows": 4, "tiles": [{"position": {"col": 2, "row": 0}, "value": 1}, {"position": {"col": 3, "row": 2}, "value": 1}, {"position": {"col": 0, "row": 1}, "value": 1}, {"position": {"col": 0, "row": 2}, "value": 2}, {"position": {"col": 2, "row": 2}, "value": 1}, {"position": {"col": 1, "row": 0}, "value": 1}, {"position": {"col": 0, "row": 3}, "value": 2}], "next_tile": {"value": 3}, "ncols": 4}')
     '''
     obj = json.loads(json_board_definition)
-    board = Board(nrows=obj['nrows'], ncols=obj['ncols'])
+    board = Board(nrows=obj['nrows'], ncols=obj['ncols'], next_id=obj['next_id'])
     for tile in obj['tiles']:
-        board.add_tile(Tile(position=(tile['position']['row'], tile['position']['col']), value=tile['value']))
+        board.add_tile(Tile(position=(tile['position']['row'], tile['position']['col']), value=tile['value'], an_id=tile['id']))
     return board
 
 
 if __name__ == '__main__':
-    b = create_board_from_json('{"nrows": 4, "tiles": [{"position": {"col": 2, "row": 0}, "value": 1}, {"position": {"col": 3, "row": 2}, "value": 1}, {"position": {"col": 0, "row": 1}, "value": 1}, {"position": {"col": 0, "row": 2}, "value": 2}, {"position": {"col": 2, "row": 2}, "value": 1}, {"position": {"col": 1, "row": 0}, "value": 1}, {"position": {"col": 0, "row": 3}, "value": 2}], "next_tile": {"value": 3}, "ncols": 4}')
+    b = create_board_from_json('{"nrows": 4, "tiles": [{"position": {"col": 2, "row": 0}, "value": 1, "id": 1}, {"position": {"col": 3, "row": 2}, "value": 1, "id": 2}, {"position": {"col": 0, "row": 1}, "value": 1, "id": 3}, {"position": {"col": 0, "row": 2}, "value": 2, "id": 4}, {"position": {"col": 2, "row": 2}, "value": 1, "id": 5}, {"position": {"col": 1, "row": 0}, "value": 1, "id": 6}, {"position": {"col": 0, "row": 3}, "value": 2 , "id": 7}], "next_tile": {"value": 3}, "ncols": 4, "next_id": 8}')
 
     # b = Board(4, 4)
     # b.add_random_tile()
