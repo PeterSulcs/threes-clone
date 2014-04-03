@@ -149,7 +149,9 @@ class Board(object):
             if not self.is_space_filled(n, col):
                 possible_locations.append(n)
         if possible_locations:
-            self.add_tile(Tile(value=self.next_tile_value, position=(random.choice(possible_locations), col)))
+            self.add_tile(Tile(value=self.next_tile_value, position=(random.choice(possible_locations), col),
+                          an_id=self.next_id))
+            self.next_id += 1
             self.next_tile_value = get_random_tile_value()
         pass
 
@@ -159,7 +161,9 @@ class Board(object):
             if not self.is_space_filled(row, n):
                 possible_locations.append(n)
         if possible_locations:
-            self.add_tile(Tile(value=self.next_tile_value, position=(row, random.choice(possible_locations))))
+            self.add_tile(Tile(value=self.next_tile_value, position=(row, random.choice(possible_locations)),
+                               an_id=self.next_id))
+            self.next_id += 1
             self.next_tile_value = get_random_tile_value()
         pass
 

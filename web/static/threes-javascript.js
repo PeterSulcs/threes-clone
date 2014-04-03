@@ -151,9 +151,10 @@ $(document).ready(function() {
 
         var svg = d3.select("#demo > svg");
         //svg.selectAll("rect").remove();
-        var join = svg.selectAll("rect").data(tiles);
+        var join = svg.selectAll("rect").data(tiles, function(d) {return d.id;});
         join.enter()
             .append("svg:rect")
+            .attr("index", function(d, i) {return i;})
             .attr("height", function() {return y(0.95)})
             .attr("width", function() {return x(0.95)})
             .attr("x", function(d) { return x(xPosFn(d)+0.025) })
@@ -171,9 +172,10 @@ $(document).ready(function() {
 
         var labels = d3.select("#demo > svg");
         //labels.selectAll("text").remove();
-        var join = labels.selectAll("text").data(tiles);
+        var join = labels.selectAll("text").data(tiles, function(d) {return d.id;});
         join.enter()
             .append("svg:text")
+            .attr("index", function(d, i) {return i;})
             .attr("x", function(d) { return x(xPosFn(d)+0.5)})
             .attr("y", function(d) { return y(yPosFn(d)+0.5)})
             .attr("fill", function(d) { return z_reverse(zPosFn(d))})
